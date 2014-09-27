@@ -4,6 +4,7 @@ require 'date'
 require_relative 'player'
 require_relative 'bullet'
 require_relative 'bounding_box'
+require_relative 'timer'
 
 class GameWindow < Gosu::Window
   SCREEN_WIDTH = 1072
@@ -59,11 +60,13 @@ class GameWindow < Gosu::Window
     end
 
     if button_down? Gosu::Button::KbSpace
-      @bullets << Bullet.new(self, @player1, "img/bullet1.png")
+      @time = Timer.new
+      @bullets << Bullet.new(self, @player1, @time, "img/bullet1.png")
     end
 
     if button_down? Gosu::Button::KbRightShift
-      @bullets << Bullet.new(self, @player2, "img/bullet2.png")
+      @time = Timer.new
+      @bullets << Bullet.new(self, @player2, @time, "img/bullet2.png")
     end
 
   end
@@ -78,7 +81,7 @@ class GameWindow < Gosu::Window
   end
 
   def bullet_hit?
-    
+
   end
 
 end

@@ -1,14 +1,19 @@
 class Bullet
   attr_accessor :x, :y
 
-  def initialize(window, player, icon)
+  def initialize(window, player, time, icon)
     @window = window
     @which_player = player.x
     @x = player.x
     @y = player.y
-    @x_vel = 1
-    @y_vel = 1
+    @x_vel = 0.1
+    @y_vel = 0.1
+    @x_acc = 100
+    @y_acc = 10
+    @weight = 0.5
     @angle = player.angle
+    @time = time
+    # binding.pry
     @bullet_img = Gosu::Image.new(@window, icon, true)
   end
 
@@ -19,11 +24,22 @@ class Bullet
 
   def move
     if @which_player > 900
-      @x -= @x_vel
+      @x -= @x_vel * Math.cos(-@angle * (Math::PI / 180)) * @x / @x_acc
+      if @angle > 0
+          @y += -(0.5 * @y_acc + @y_vel * Math.sin(-@angle * (Math::PI / 180)))
+      end
     else
-      @x += @x_vel
+      @x += @x_vel * Math.cos(@angle * (Math::PI / 180)) * @x / @x_acc
+      if @angle < 0
+          @y += -(0.5 * @y_acc + @y_vel * Math.sin(@angle * (Math::PI / 180)))
+      end
     end
-    @x_vel += 0.5
+
+    @x_acc += 5
+    @y_acc -= 0.25 * @weight
+    @x_vel += 0.1
+    @y_vel -= 0.1
+    @weight += 0.0025
   end
 
   def draw
