@@ -19,6 +19,8 @@ class GameWindow < Gosu::Window
     @player2 = Player.new(self, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, "img/girl.png")
     @bg_img = Gosu::Image.new(self, 'img/bg.jpg', true)
     @bullets = []
+    @bullets1 = []
+    @bullets2 = []
   end
 
   def update
@@ -61,14 +63,29 @@ class GameWindow < Gosu::Window
 
     if button_down? Gosu::Button::KbSpace
       @time = Timer.new
-      @bullets << Bullet.new(self, @player1, @time, "img/bullet1.png")
+      @bullet1 = Bullet.new(self, @player1, @time, "img/bullet1.png")
+      @bullets1 << @bullet1
+      @bullets << @bullet1
     end
 
     if button_down? Gosu::Button::KbRightShift
       @time = Timer.new
-      @bullets << Bullet.new(self, @player2, @time, "img/bullet2.png")
+      @bullet2 = Bullet.new(self, @player2, @time, "img/bullet2.png")
+      @bullets2 << @bullet2
+      @bullets << @bullet2
     end
 
+    @bullets2.each do |bullet|
+      if @player1.hit_by?(bullet)
+        @player1.minus_health
+      end
+    end
+
+    @bullets1.each do |bullet|
+      if @player2.hit_by?(bullet)
+        @player2.minus_health
+      end
+    end
   end
 
   def draw
@@ -78,10 +95,6 @@ class GameWindow < Gosu::Window
     @bullets.each do |bullet|
       bullet.draw
     end
-  end
-
-  def bullet_hit?
-
   end
 
 end

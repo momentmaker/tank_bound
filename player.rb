@@ -1,5 +1,5 @@
 class Player
-  attr_accessor :x, :y, :angle
+  attr_accessor :x, :y, :angle, :health
 
   def initialize(window, x, y, icon)
     @window = window
@@ -9,6 +9,7 @@ class Player
     @move_right = false
     @move_left = false
     @icon = Gosu::Image.new(@window, icon, true)
+    @health = 100
   end
 
   def draw
@@ -72,5 +73,13 @@ class Player
       @y += 0.1
       @x -= 0.1
     end
+  end
+
+  def hit_by?(bullet)
+    Gosu::distance(@x, @y, bullet.x, bullet.y) < 50
+  end
+
+  def minus_health
+    @health -= 1
   end
 end
